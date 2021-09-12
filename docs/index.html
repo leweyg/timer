@@ -27,7 +27,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
     
       <div class="w3-white w3-text-grey w3-card-4">
         <div class="w3-container">
-            <h2>
+            <h2 id="main_title_time" class="w3-center">
                 time now
             </h2>
           <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>Designer</p>
@@ -62,6 +62,11 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
 
     <!-- End Left Column -->
     </div>
+
+    <script src="timing.js"></script>
+    <script>
+        main_title_time.innerHTML = titleLocalTime();
+    </script>
 
     <!-- Right Column -->
     <div class="w3-twothird">
