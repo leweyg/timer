@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>W3.CSS Template</title>
+<title>timer - lewcid.com</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- 
@@ -30,6 +30,27 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
             <h2 id="main_title_time" class="w3-center">
                 time now
             </h2>
+
+
+    <script src="timing.js"></script>
+    <script>
+        main_title_time.innerHTML = titleLocalTime();
+
+        function writeDetails() {
+            var details = timingDetails();
+            for (var di in details) {
+                var det = details[di];
+                document.write("<p><i class=\"fa fa-");
+                document.write(det.icon);
+                document.write(" fa-fw w3-margin-right w3-large w3-text-teal\"></i>");
+                document.write(det.title + ": <u>" + det.subtitle + ":</u> " + det.desc);
+                document.write("</p>\n");
+            }
+        }
+        writeDetails();
+    </script>
+
+<!--
           <p><i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i>Designer</p>
           <p><i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i>London, UK</p>
           <p><i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i>ex@mail.com</p>
@@ -56,6 +77,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
             <div class="w3-container w3-center w3-round-xlarge w3-teal" style="width:50%">50%</div>
           </div>
           <br>
+        -->
 
         </div>
       </div><br>
@@ -63,10 +85,6 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
     <!-- End Left Column -->
     </div>
 
-    <script src="timing.js"></script>
-    <script>
-        main_title_time.innerHTML = titleLocalTime();
-    </script>
 
     <!-- Right Column -->
     <div class="w3-twothird">
