@@ -40,7 +40,7 @@ function dayOfTheWeek(d) {
 
 function titleLocalTime() {
     var d = _sMainTime;
-    var datestring = d.getDate()  + "-" + (d.getMonth()+1) + "-" + d.getFullYear();
+    var datestring = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + + d.getDate();
     datestring += "<br/>" + planetInfoByIndex(d.getDay()).name;
     datestring += "<br/>" + d.getHours() + ":" + ("0" + d.getMinutes()).slice(-2);
     datestring += "<br/>" + hoursPastSunRise(d).toFixed(1) + "h past sunrise";
@@ -60,16 +60,16 @@ function timingDetails() {
     });
 
     var pastSunrise = hoursPastSunRise(d);
-    var curHour = planetInfoByIndex(pastSunrise - d.getDay());
+    var curHour = planetInfoByIndex(pastSunrise + d.getDay());
     items.push({
         title : "Hour",
         icon : "hourglass-start",
         subtitle : curHour.planet,
         desc : curHour.desc,
     });
-    var nextHour = planetInfoByIndex(pastSunrise+1.0-d.getDay());
+    var nextHour = planetInfoByIndex(pastSunrise + 1.0 + d.getDay());
     items.push({
-        title : "Hour",
+        title : "Next Hour",
         icon : "hourglass-end",
         subtitle : nextHour.planet,
         desc : nextHour.desc,
