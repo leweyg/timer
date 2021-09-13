@@ -40,7 +40,7 @@ function dayOfTheWeek(d) {
 
 function titleLocalTime() {
     var d = _sMainTime;
-    var datestring = d.getFullYear() + "-" + (d.getMonth()+1) + "-" + + d.getDate();
+    var datestring = d.getDate() + "d " + (d.getMonth()+1) + "m " + d.getFullYear();
     datestring += "<br/>" + planetInfoByIndex(d.getDay()).name;
     datestring += "<br/>" + d.getHours() + ":" + ("0" + d.getMinutes()).slice(-2);
     datestring += "<br/>" + hoursPastSunRise(d).toFixed(1) + "h past sunrise";
