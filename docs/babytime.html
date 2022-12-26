@@ -15,34 +15,49 @@
 html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
 
 .babyTable { width: 99%; text-align: center; font-size:x-large; }
-.babyRow { background-color: white; }
+.babyRow { background-color: black;}
 .babyRowTitle { background-color: lightblue; }
 .babyCol { width: 33%; }
-.babyColTime { font-size: medium; }
-.babyButton { padding: 15px; }
+.babyColTime { font-size: large; }
+.babyButton { padding: 15px; background-color: darkgray; color: white; }
+.babyEventButton { padding: 10px;background-color: cornflowerblue; color: white; }
 
 </style>
-<body class="w3-light-grey">
+<body class="w3-black">
 
 <!-- Page Container -->
-<div class="w3-content w3-margin-top" style="max-width:1400px;">
+<div class="" style="max-width:1400px;">
 
   <!-- The Grid -->
   <div class="w3-row-padding">
   
     <!-- Left Column -->
-    <div class="w3-third">
+    <div>
     
-      <div class="w3-white w3-text-grey w3-card-4">
-        <div class="w3-container">
+      <div class="w3-black w3-text-light-grey">
+        <div >
 
           <table id="main_baby_title" class="babyTable">
             <tr class="babyRow">
-              <td class="babyCol">now</td>
+              <td class="babyCol">BabyTime</td>
               <td class="babyCol"> <input type="button" value="add" class="babyButton" onclick="BabyTimeCore.add_event()" /> </td>
               <td class="babyCol babyColTime" id="main_time_now">time_now</td>
             </tr>
           </table>
+          <div>
+            <center>
+              <input value="woke" type="button" class="babyEventButton" onclick="BabyTimeCore.add_event('woke')" />
+              <input value="slept" type="button" class="babyEventButton" onclick="BabyTimeCore.add_event('slept')" />
+
+              <input value="left" type="button" class="babyEventButton" onclick="BabyTimeCore.add_event('left')" />
+              <input value="arrived" type="button" class="babyEventButton"onclick="BabyTimeCore.add_event('arrived')"   />
+              
+              <input value="ate" type="button" class="babyEventButton" onclick="BabyTimeCore.add_event('ate')"  />
+              <input value="cleaned" type="button" class="babyEventButton" onclick="BabyTimeCore.add_event('cleaned')"  />
+              <br/>
+              <br/>
+            </center>
+          </div>
 
           <table id="main_baby_events" class="babyTable">
           </table>
@@ -62,12 +77,12 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
               ],
               current : null,
           },
-          add_event : function() {
+          add_event : function(event_type="-") {
             var core = BabyTimeCore;
             var curTime = new Date();
             var e = {
               time : curTime.toISOString(),
-              type : "-",
+              type : event_type,
             }
             var st = core.state_clone();
             st.events.push(e);
@@ -237,7 +252,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
   <!-- End Page Container -->
 </div>
 
-<footer class="w3-container w3-teal w3-center w3-margin-top">
+<footer class="w3-container w3-black w3-center w3-margin-top">
   <p><a href="http://lewcid.com">Lewcid.com</a></p>
 </footer>
 
