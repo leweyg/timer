@@ -20,7 +20,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
 .babyCol { width: 33%; }
 .babyColTime { font-size: large; }
 .babyButton { padding: 15px; background-color: darkgray; color: white; }
-.babyEventButton { padding: 10px;background-color: cornflowerblue; color: white; }
+.babyEventButton { padding: 15px; font-size: x-large; background-color: cornflowerblue; color: white; }
 
 </style>
 <body class="w3-black">
@@ -44,20 +44,31 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
               <td class="babyCol babyColTime" id="main_time_now">time_now</td>
             </tr>
           </table>
-          <div>
-            <center>
-              <input value="woke" type="button" class="babyEventButton" onclick="BabyTimeCore.add_event('woke')" />
-              <input value="slept" type="button" class="babyEventButton" onclick="BabyTimeCore.add_event('slept')" />
 
-              <input value="left" type="button" class="babyEventButton" onclick="BabyTimeCore.add_event('left')" />
-              <input value="arrived" type="button" class="babyEventButton"onclick="BabyTimeCore.add_event('arrived')"   />
-              
-              <input value="ate" type="button" class="babyEventButton" onclick="BabyTimeCore.add_event('ate')"  />
-              <input value="cleaned" type="button" class="babyEventButton" onclick="BabyTimeCore.add_event('cleaned')"  />
-              <br/>
-              <br/>
-            </center>
+          <div style="overflow-x: scroll;">
+            <table><tr id="main_button_list"></tr></table>
           </div>
+          <br/>
+          <script>
+            var ButtonNames = [
+              "woke", "slept", "nursed", "cleaned",
+              "sat", "lay", "tummy", "carried",
+              "left","arrived"
+            ];
+            function buildButtonList() {
+              var list = "";
+              for (var i in ButtonNames) {
+                var name = ButtonNames[i];
+                var btn = "<td><input type='button' class='babyEventButton' ";
+                btn += " value='" + name + "' ";
+                btn += " onclick=\"BabyTimeCore.add_event('" + name + "')\" ";
+                btn += " /></td>"
+                list += btn;
+              }
+              main_button_list.innerHTML = list;
+            }
+            buildButtonList();
+          </script>
 
           <table id="main_baby_events" class="babyTable">
           </table>
@@ -143,7 +154,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
       var BabyTimeUtils = {
           cookieSave : function(state,prefix="baby_time") {
               var txt = JSON.stringify(state);
-              document.cookie = "max-age=2628000;" + prefix + "=" + txt;
+              document.cookie = prefix + "=" + txt;
           },
           cookieTryLoad : function(prefix="baby_time") {
               var parts = document.cookie.split(";");
