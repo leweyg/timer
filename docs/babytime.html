@@ -40,15 +40,12 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
             <tr class="babyRow">
               <td class="babyCol">now</td>
               <td class="babyCol"> <input type="button" value="add" class="babyButton" onclick="BabyTimeCore.add_event()" /> </td>
-              <td class="babyCol babyColTime">12:15 am</td>
+              <td class="babyCol babyColTime" id="main_time_now">time_now</td>
             </tr>
           </table>
 
           <table id="main_baby_events" class="babyTable">
           </table>
-          
-            <h2 id="main_title_time" class="w3-center">
-            </h2>
 
 
     <script>
@@ -74,7 +71,19 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
             }
             var st = core.state_clone();
             st.events.push(e);
+            core.clean_state(st);
             core.state_replace(st);
+          },
+          clean_state : function(state) {
+            var comp = ((a,b) => {
+              if ((!a.time) || (!b.time)) {
+                return 0;
+              }
+              var at = Date.parse(a.time);
+              var bt = Date.parse(b.time);
+              return (bt - at);
+            });
+            state.events.sort(comp);
           },
           state_clone : function() {
             var obj = BabyTimeCore.state;
@@ -93,6 +102,13 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
     </script>
     <script src="babytime.js"></script>
     <script>
+        function dateToDisplayTime(dateObj) {
+          var core = dateObj.toLocaleTimeString();
+          var end = core.split(" ")[1].toLocaleLowerCase();
+          var main = core.split(" ")[0].split(":");
+          var ms = main[0] + ":" + main[1] + "." + main[2];
+          return ms + end;
+        }
         function updateBabyEvents() {
           var tableContent = "";
           var timeNow = new Date();
@@ -103,7 +119,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
 
             row += "<td class='babyCol'>";
             var delta = new Date(timeNow - eTime);
-            row += "-" + delta.getMinutes() + ":" + delta.getSeconds().toString().padStart(2,'0');
+            row += "-" + delta.getUTCHours() + ":" + delta.getUTCMinutes() + ":" + delta.getSeconds().toString().padStart(2,'0');
             row += "</td>";
 
             row += "<td class='babyCol'>";
@@ -111,7 +127,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
             row += "</td>";
 
             row += "<td class='babyCol babyColTime'>";
-            row += eTime.toLocaleTimeString().toLocaleLowerCase().replace(" ","");
+            row += dateToDisplayTime(eTime);
             row += "</td>";
 
             row += "</tr>";
@@ -119,6 +135,8 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
           }
 
           main_baby_events.innerHTML = tableContent;
+
+          main_time_now.innerHTML = dateToDisplayTime(new Date());
         }
 
         _babyCoreRedraw = (() => { updateBabyEvents(); });
