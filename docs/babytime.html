@@ -13,6 +13,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
 html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
+
+.babyTable { width: 99%; text-align: center; font-size:x-large; }
+.babyRow { background-color: white; }
+.babyRowTitle { background-color: lightblue; }
+.babyCol { width: 33%; }
+.babyColTime { font-size: medium; }
+.babyButton { padding: 15px; }
+
 </style>
 <body class="w3-light-grey">
 
@@ -27,27 +35,95 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
     
       <div class="w3-white w3-text-grey w3-card-4">
         <div class="w3-container">
+
+          <table id="main_baby_title" class="babyTable">
+            <tr class="babyRow">
+              <td class="babyCol">now</td>
+              <td class="babyCol"> <input type="button" value="add" class="babyButton" onclick="BabyTimeCore.add_event()" /> </td>
+              <td class="babyCol babyColTime">12:15 am</td>
+            </tr>
+          </table>
+
+          <table id="main_baby_events" class="babyTable">
+          </table>
+          
             <h2 id="main_title_time" class="w3-center">
-                time now
             </h2>
 
 
-    <script src="timing.js"></script>
     <script>
-        main_title_time.innerHTML = titleLocalTime();
-
-        function writeDetails() {
-            var details = timingDetails();
-            for (var di in details) {
-                var det = details[di];
-                document.write("<p><i class=\"fa fa-");
-                document.write(det.icon);
-                document.write(" fa-fw w3-margin-right w3-large w3-text-teal\"></i>");
-                document.write(det.title + ": <u>" + det.subtitle + ":</u> " + det.desc);
-                document.write("</p>\n");
+      var _babyCoreRedraw = (() => {});
+      var BabyTimeCore = {
+          state : {
+              events : [ 
+                /*
+                {
+                time:Date.now().toUTCString(),
+                type:"-",
+                }
+                */
+              ],
+              current : null,
+          },
+          add_event : function() {
+            var core = BabyTimeCore;
+            var curTime = new Date();
+            var e = {
+              time : curTime.toISOString(),
+              type : "-",
             }
+            var st = core.state_clone();
+            st.events.push(e);
+            core.state_replace(st);
+          },
+          state_clone : function() {
+            var obj = BabyTimeCore.state;
+            var txt = JSON.stringify(obj);
+            return JSON.parse(txt);
+          },
+          state_replace : function(new_state) {
+            BabyTimeCore.state = new_state;
+            BabyTimeCore.redraw();
+          },
+          redraw : function() {
+            _babyCoreRedraw();
+          },
+      };
+
+    </script>
+    <script src="babytime.js"></script>
+    <script>
+        function updateBabyEvents() {
+          var tableContent = "";
+          var timeNow = new Date();
+          for (var ei in BabyTimeCore.state.events) {
+            var e = BabyTimeCore.state.events[ei];
+            var row = "<tr class='babyRow'>";
+            var eTime = new Date(Date.parse(e.time));
+
+            row += "<td class='babyCol'>";
+            var delta = new Date(timeNow - eTime);
+            row += "-" + delta.getMinutes() + ":" + delta.getSeconds().toString().padStart(2,'0');
+            row += "</td>";
+
+            row += "<td class='babyCol'>";
+            row += e.type;
+            row += "</td>";
+
+            row += "<td class='babyCol babyColTime'>";
+            row += eTime.toLocaleTimeString().toLocaleLowerCase().replace(" ","");
+            row += "</td>";
+
+            row += "</tr>";
+            tableContent += row;
+          }
+
+          main_baby_events.innerHTML = tableContent;
         }
-        writeDetails();
+
+        _babyCoreRedraw = (() => { updateBabyEvents(); });
+        BabyTimeCore.redraw();
+
     </script>
 
 <!--
