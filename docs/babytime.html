@@ -169,6 +169,28 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
           var ms = main[0] + ":" + main[1] + "." + main[2];
           return ms + end;
         }
+        function dateToDisplayDelta(delta) {
+          var ans = "";
+          if (delta.getUTCDay()) {
+            //ans += delta.getUTCDay() + "d ";
+          }
+          if (delta.getUTCHours()) {
+            ans += delta.getUTCHours() + "h ";
+
+          }
+          var showSecs = (ans == "");
+          if (true) {
+            var mins = delta.getUTCMinutes();
+            ans += mins + "m ";
+            if (showSecs && (mins > 10)) {
+              showSecs = false;
+            }
+          }
+          if (showSecs) {
+            ans += delta.getSeconds().toString().padStart(2,'0') + "s ";
+          }
+          return "-" + ans;
+        }
         function updateBabyEvents() {
           var tableContent = "";
           var timeNow = new Date();
@@ -179,7 +201,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
 
             row += "<td class='babyCol'>";
             var delta = new Date(timeNow - eTime);
-            row += "-" + delta.getUTCHours() + ":" + delta.getUTCMinutes() + ":" + delta.getSeconds().toString().padStart(2,'0');
+            row += dateToDisplayDelta(delta);
             row += "</td>";
 
             row += "<td class='babyCol'>";
