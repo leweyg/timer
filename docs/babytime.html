@@ -105,17 +105,62 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
             var txt = JSON.stringify(obj);
             return JSON.parse(txt);
           },
-          state_replace : function(new_state) {
+          state_replace : function(new_state,skip_save=false) {
             BabyTimeCore.state = new_state;
             BabyTimeCore.redraw();
+            if (!skip_save) {
+              BabyTimeCore.save();
+            }
           },
           redraw : function() {
             _babyCoreRedraw();
           },
+          save : function() {
+            try {
+              var core = BabyTimeCore;
+              var state = core.state;
+              BabyTimeUtils.cookieSave(state);
+            } catch(ex) {
+              throw ex;
+              console.log(ex);
+            }
+          },
+          reload : function() {
+            try {
+              var core = BabyTimeCore;
+              var state = BabyTimeUtils.cookieTryLoad();
+              if (state && state.events) {
+                core.state_replace(state, skip_save=true);
+              }
+            } catch (ex) {
+              console.log(ex);
+            }
+          },
       };
 
     </script>
-    <script src="babytime.js"></script>
+    <script>
+      var BabyTimeUtils = {
+          cookieSave : function(state,prefix="baby_time") {
+              var txt = JSON.stringify(state);
+              document.cookie = "max-age=2628000;" + prefix + "=" + txt;
+          },
+          cookieTryLoad : function(prefix="baby_time") {
+              var parts = document.cookie.split(";");
+              prefix = prefix + "=";
+              for (var i in parts) {
+                  var p = parts[i].trim();
+                  if (p.startsWith(prefix)) {
+                      p = p.replace(prefix,"");
+                      var obj = JSON.parse(p);
+                      return obj;
+                  }
+              }
+              return false;
+          },
+      };
+
+    </script>
     <script>
         function dateToDisplayTime(dateObj) {
           var core = dateObj.toLocaleTimeString();
@@ -156,6 +201,18 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif}
 
         _babyCoreRedraw = (() => { updateBabyEvents(); });
         BabyTimeCore.redraw();
+
+        BabyTimeCore.reload();
+
+        function doTimeUpdate() {
+          BabyTimeCore.redraw(); 
+          requestUpdate();
+        }
+        function requestUpdate() {
+          var updateRateMS = 2000;
+          setTimeout(doTimeUpdate, updateRateMS);
+        }
+        requestUpdate();
 
     </script>
 
